@@ -101,7 +101,8 @@ export async function connect(
       : {};
   const room = await client.joinOrCreate('town', joinOptions);
   await waitForRoomState(room);
-  await waitForRoomMobs(room);
+  // Do not block world rendering while waiting for mob state; mobs sync asynchronously.
+  void waitForRoomMobs(room);
 
   room.onMessage('characterId', (id: string) => {
     storeCharacterId(id);
